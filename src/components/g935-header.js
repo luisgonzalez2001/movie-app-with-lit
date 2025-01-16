@@ -1,5 +1,9 @@
 import { LitElement, html, css } from "lit";
 import { Title } from "./g935-title";
+import { unsafeCSS } from 'lit';
+
+const optionsIcon = new URL('../../public/icons/options-icon.svg', import.meta.url).href; 
+const searchIcon = new URL('../assets/icons/search-icon.svg', import.meta.url).href;
 
 export class Header extends LitElement {
     static get properties() {
@@ -26,7 +30,7 @@ export class Header extends LitElement {
                 justify-content: space-between;
                 border-bottom: 1px solid var(--Gray);
                 padding: 5px 25px;
-                background: rgba(0, 0, 0, 0.5);
+                background: white;
                 backdrop-filter: blur(40px);
             }
 
@@ -34,13 +38,15 @@ export class Header extends LitElement {
                 display: inline-block;
                 width: 30px;
                 height: 30px;
-                background: center / contain no-repeat url('../assets/icons/options-icon.svg');
+                background: center / contain no-repeat url('../../public/icons/options-icon.svg');
+                cursor: pointer;
             }
 
             .header-search-icon {
                 width: 20px;
                 height: 20px;
-                background: center / contain no-repeat url('../assets/icons/search-icon.svg');
+                background: center / contain no-repeat url('../../public/icons/search-icon.svg');
+                cursor: pointer;
             }
         `;
     }
