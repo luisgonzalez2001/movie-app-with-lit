@@ -4,7 +4,7 @@ export class HeaderMenu  extends LitElement {
 
   static get styles() {
     return css`
-        :host {
+        .header-menu-container {
             position: fixed;
             background: rgba(0, 0, 0, 0.5);
             width: 100%;
@@ -17,16 +17,7 @@ export class HeaderMenu  extends LitElement {
             visibility: hidden;
         }
 
-        .header-menu-container {
-            
-        }
-
-        #btn-menu:checked ~ .header-menu-container {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .menu-container {
+        .menu-container{
             width: 100%;
             max-width: 250px;
             background: #1c1c1c;
@@ -36,15 +27,11 @@ export class HeaderMenu  extends LitElement {
             transform: translateX(-100%);
         }
 
-        #btn-menu:checked ~ .header-menu-container .menu-container {
-            transform: translateX(0%);
-        }
-
-        .menu-container nav {
+        nav {
             transform: translateY(15%);
         }
 
-        .menu-container nav a {
+        a {
             display: block;
             text-decoration: none;
             padding: 20px;
@@ -53,35 +40,48 @@ export class HeaderMenu  extends LitElement {
             transition: all 400ms ease;
         }
 
-        .menu-container nav a:hover {
+        a:hover {
             border-left: 5px solid var(--Red);
             background: #1f1f1f;
         }
 
-        .header-menu-close-icon {
+        button {
             position: absolute;
             right: 15px;
             top: 15px;
             cursor: pointer;
             width: 30px;
             height: 30px;
-            background: center / contain no-repeat url('../assets/icons/close.svg');
+            border: none;
+            background: center / contain no-repeat url('../../public/icons/close.svg');
+        }
+
+        .active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .translate {
+            transform: translateX(0%);
         }
     `;
   }
 
   static get properties() {
-    return {};
+    return {
+        activeMenuContainer: {type: Boolean}
+    };
   }
 
   constructor() {
     super();
+    this.activeMenuContainer = false;
   }
 
   render() {
     return html`
-        <div class="header-menu-container">
-            <div class="menu-container">
+        <div class="header-menu-container ${this.activeMenuContainer ? 'active' : ''}">
+            <div class="menu-container ${this.activeMenuContainer ? 'translate' : ''}">
                 <nav>
                     <a href="#home">Home</a>
                     <a href="#trends">Trending</a>
@@ -89,10 +89,17 @@ export class HeaderMenu  extends LitElement {
                     <a href="#popular">Popular</a>
                     <a href="#upcoming">Upcoming</a>
                 </nav>
-                <label for="btn-menu" class="header-menu-close-icon"></label>
+                <button @click=${this._dispatchMenu}></button>
             </div>
         </div>
     `;
+  }
+
+  _dispatchMenu(){
+    const event = new CustomEvent('close_menu', {
+        detail: { activeMenuContainer: this.activeMenuContainer }
+    });
+    this.dispatchEvent(event);
   }
 }
 

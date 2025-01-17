@@ -6,6 +6,20 @@ export class Button  extends LitElement {
         :host {
           display: block;
         }
+
+        button {
+          width: 100%;
+          height: 100%;
+          padding: 5px;
+          border-radius: 8px;
+          border: none;
+          background-color: var(--Red);
+          color: var(--White);
+          font-size: 1.4rem;
+          font-family: var(--font-family-text);
+          font-weight: var(--font-weight-title1);
+          cursor: pointer;
+        }
       `;
     }
     

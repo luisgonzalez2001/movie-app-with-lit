@@ -3,14 +3,11 @@ import { Title } from "./g935-title";
 import { SearchForm } from "./g935-searchForm";
 import { HeaderMenu } from "./g935-header-menu";
 
-const optionsIcon = new URL('../../public/icons/options-icon.svg', import.meta.url).href; 
-const searchIcon = new URL('../assets/icons/search-icon.svg', import.meta.url).href;
-
 export class Header extends LitElement {
     static get properties() {
         return {
             searchFormActive: {type: Boolean},
-            classes: {},
+            headerMenuActive: {type: Boolean},
         }
     }
 
@@ -41,15 +38,15 @@ export class Header extends LitElement {
                 backdrop-filter: blur(40px);
             }
 
-            label {
-                display: inline-block;
+            .menu-icon {
                 width: 30px;
                 height: 30px;
+                border: none;
                 background: center / contain no-repeat url('../../public/icons/options-icon.svg');
                 cursor: pointer;
             }
 
-            button {
+            .search-icon {
                 width: 20px;
                 height: 20px;
                 border: none;
@@ -66,30 +63,42 @@ export class Header extends LitElement {
     constructor() {
         super();
         this.searchFormActive = false;
-        this.classes = {inactive: false}
+        this.headerMenuActive = false;
     }
 
     render() {
         return html`
             <header id="header">
-                <label for="btn-menu"></label>
+                <button
+                    class='menu-icon'
+                    @click=${this._activeHeaderMenu}
+                ></button>
                 <g935-title
                     class=${this.searchFormActive ? 'inactive' : ''} 
                 >MOVIEAPP</g935-title>
                 <button 
                     id="btnSearch-Active" 
-                    class=${this.searchFormActive ? 'inactive' : ''} 
+                    class=${this.searchFormActive ? 'inactive' : 'search-icon'} 
                     @click=${this._activeSearchForm}
                 ></button>
                 <g935-searchform
                     class=${!this.searchFormActive ? 'inactive' : ''} 
                 ></g935-searchform>
             </header>
+            <g935-header-menu 
+                ?activeMenuContainer=${this.headerMenuActive}
+                @close_menu=${() => this.headerMenuActive = !this.headerMenuActive}    
+            ></g935-header-menu>
         `;
     }
 
     _activeSearchForm() {
         this.searchFormActive = !this.searchFormActive;
+        console.log('Activado/desactivado');
+    }
+
+    _activeHeaderMenu() {
+        this.headerMenuActive = !this.headerMenuActive;
         console.log('Activado/desactivado');
     }
 }
