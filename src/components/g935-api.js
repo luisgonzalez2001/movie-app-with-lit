@@ -4,7 +4,8 @@ import axios from "axios";
 export class Api extends LitElement {
     static get properties() {
         return {
-            query: { type: String}
+            query: { type: String},
+            idMovie: { type: String},
         }
     }
 
@@ -37,6 +38,18 @@ export class Api extends LitElement {
             case 'trending':
                 await this.getTrendingMovies();
                 break;
+            case 'upcoming':
+                await this.getUpcomingMovies();
+                break;
+            case 'popular':
+                await this.getPopularMovies();
+                break;
+            case 'genres':
+                await this.getGenres();
+                break;
+            case 'movie':
+                await this.getMovieById(this.idMovie);
+                break;
             default:
                 console.log('Invalid query type');
         }
@@ -45,6 +58,26 @@ export class Api extends LitElement {
     async getTrendingMovies() {
         const { data } = await this.api('trending/movie/day');
         this._sendData(data);
+    }
+
+    async getUpcomingMovies() { 
+        const { data } = await this.api('movie/upcoming'); 
+        this._sendData(data);
+    } 
+    
+    async getPopularMovies() { 
+        const { data } = await this.api('movie/popular'); 
+        this._sendData(data);
+    }
+
+    async getGenres() { 
+        const { data } = await this.api('genre/movie/list');
+        this._sendData(data);
+    }
+
+    async getMovieById(id) { 
+        const { data } = await this.api('movie/' + id);
+        this._sendData(data); 
     }
 }
 customElements.define('g935-api', Api);

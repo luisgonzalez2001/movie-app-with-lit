@@ -119,34 +119,47 @@ export class MovieDetail  extends LitElement {
     }
 
     static get properties() {
-        return {};
+        return {
+            idMovie: { type: String},
+            movie: {type: Object},
+        };
     }
 
     constructor() {
         super();
+        this.movie = {};
+        this.genre = '';
     }
 
     render() {
         return html`
-            <section id="movieDetail" class="movieDetail-container pad20">
+            <g935-api 
+                query='movie' 
+                idMovie=${this.idMovie}
+                @get-data=${(e) => {
+                        this.genre = e.detail.data.genres[0].name;
+                        this.movie = e.detail.data}
+                    }    
+            ></g935-api>
+            <section>
                 <div class="movieDetail__background">
-                    <img src="https://image.tmdb.org/t/p/w300/adOzdWS35KAo21r9R4BuFCkLer6.jpg">
+                    <img src="https://image.tmdb.org/t/p/w500${this.movie.poster_path}">
                 </div>
                 <div class="movieDetail-info">
                     <div class="movieDetail-datas">
                         <div class="movieDetail-score">
                             <span class="score-icon">★</span>
-                            <p class="movieDetail-score__text"> 7.5</p>
+                            <p class="movieDetail-score__text"> ${this.movie.vote_average}</p>
                         </div>
                         •
-                        <p class="movieDetail-time">1h 55m</p>
+                        <p class="movieDetail-time">${this.convertTime(this.movie.runtime)}</p>
                         •
-                        <p class="movieDetail-category">TRENDING</p>
+                        <p class="movieDetail-category">${this.genre}</p>
                     </div>
                     <div class="movieDetail-texts">
-                        <h2 class="movieDetail-title">Movie Title</h2>
+                        <h2 class="movieDetail-title">${this.movie.title}</h2>
                         <p class="movieDetail-description inactive">
-                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatum, fugit dignissimos eius quaerat volupta
+                            ${this.movie.overview}
                         </p>
                     </div>
                     <div class="movieDetail-buttons">
@@ -156,6 +169,12 @@ export class MovieDetail  extends LitElement {
                 </div>
             </section>
         `;
+    }
+
+    convertTime(minutes) {
+        const h = Math.floor(minutes / 60);
+        minutes = minutes % 60;
+        return `${h}h ${minutes}m`;
     }
 }
 customElements.define('g935-movie-detail', MovieDetail);

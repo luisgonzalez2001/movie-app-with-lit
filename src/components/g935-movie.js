@@ -4,7 +4,7 @@ export class Movie  extends LitElement {
     static get styles() {
         return css`
             div {
-                min-width: 130px;
+                width: 150px
             }
 
             img {
@@ -14,6 +14,7 @@ export class Movie  extends LitElement {
             }
 
             p {
+                margin: 0;
                 padding: 5px 0 15px 0;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -25,7 +26,7 @@ export class Movie  extends LitElement {
 
     static get properties() {
         return {
-            movie: { type: Object}
+            movie: { type: Object }
         };
     }
 

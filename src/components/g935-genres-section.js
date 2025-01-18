@@ -1,20 +1,28 @@
 import { LitElement, html, css } from 'lit-element';
-import { Movie } from './g935-movie';
-import { Button } from './g935-button';
 
-export class MovieSection  extends LitElement {
+export class GenresSection  extends LitElement {
     static get styles() {
-        return css`
-            div {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-
+      return css`
             article {
                 display: flex;
-                gap: 15px;
+                gap: 10px;
                 overflow-x: scroll;
+                margin-top: 20px;
+                padding-bottom: 15px;
+            }
+
+            button {
+                height: 40px;
+                padding: 5px 10px;
+                border-radius: 8px;
+                border: none;
+                color: var(--White);
+                font-size: 1.4rem;
+                font-family: var(--font-family-text);
+                font-weight: var(--font-weight-title1);
+                cursor: pointer;
+                background-color: var(--Gray);
+                white-space: nowrap;
             }
 
             *::-webkit-scrollbar {
@@ -34,42 +42,39 @@ export class MovieSection  extends LitElement {
             *::-webkit-scrollbar-thumb:hover {
                 background-color: #96261e;
             }
-        `;
+      `;
     }
-
+    
     static get properties() {
         return {
-            type: {type: String},
-            movies: {type: Array}
+            genres: {type: Array}
         };
     }
 
     constructor() {
         super();
-        this.movies = [];
+        this.genres = [];
     }
 
     render() {
         return html`
             <section>
                 <g935-api 
-                    query=${this.type}
-                    @get-data=${(e) => this.movies = e.detail.data.results}  
+                    query='genres'
+                    @get-data=${(e) => this.genres = e.detail.data.genres}   
                 ></g935-api>
-                <div class="trendingPreview-header">
-                    <h2><slot></slot></h2>
-                    <g935-button>SEE ALL</g935-button>
-                </div>
+                <h2>Categories</h2>
                 <article>
-                    ${this.movies.map(movie => {
+                    ${this.genres.map(genre => {
                         return html`
-                            <g935-movie .movie=${movie}></g935-movie> 
-                        `
-                    })}
+                            <button>${genre.name}</button>    
+                        `}
+                    )}
                 </article>
             </section>
         `;
     }
 }
 
-customElements.define('g935-movie-section', MovieSection);
+
+customElements.define('g935-genres-section', GenresSection);
