@@ -39,36 +39,40 @@ export class MovieSection  extends LitElement {
 
     static get properties() {
         return {
-            data: {type: Array},
+            type: {type: String},
         };
     }
 
     constructor() {
         super();
-        this.data = [];
+        this.movies = [];
     }
 
     render() {
         return html`
             <section>
+                ${this.getMovies()}
                 <div class="trendingPreview-header">
                     <h2><slot></slot></h2>
                     <g935-button>SEE ALL</g935-button>
                 </div>
                 <article>
-                    <g935-movie></g935-movie>
-                    <g935-movie></g935-movie>
-                    <g935-movie></g935-movie>
-                    <!-- <div class="movie-container">
-                        <img 
-                            src="https://image.tmdb.org/t/p/w300/adOzdWS35KAo21r9R4BuFCkLer6.jpg"
-                            class="movie-img" 
-                            alt="Movie name"
-                        />
-                        <p class="movie-title">Movie Title</p>
-                    </div> -->
+                    ${this.movies.map(movie => html`
+                        <g935-movie movie=${movie}></g935-movie> 
+                    `)}
                 </article>
             </section>
+        `;
+    }
+
+    getMovies() {
+        console.log('hola');
+        
+        return html`
+            <g935-api 
+                query=${this.type}
+                @get-data=${(e) => this.movies = e.detail.data.results}  
+            ></g935-api>
         `;
     }
 }

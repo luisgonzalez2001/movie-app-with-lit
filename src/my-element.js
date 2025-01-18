@@ -2,6 +2,7 @@ import { LitElement, css, html } from 'lit'
 import { Header } from './components/g935-header'
 import { MovieSection } from './components/g935-movie-section'
 import { MovieDetail } from './components/g935-movie-detail'
+import { Api } from './components/g935-api'
 
 export class MyElement extends LitElement {
   static get styles() {
@@ -26,12 +27,13 @@ export class MyElement extends LitElement {
       <g935-header></g935-header>
       <main>
         <g935-movie-detail></g935-movie-detail>
-        <g935-movie-section>Trending</g935-movie-section>
-        <g935-movie-section>Popular</g935-movie-section>
-        <g935-movie-section>Upcoming</g935-movie-section>
+        <g935-movie-section type='trending'>Trending</g935-movie-section>
       </main>
+      <g935-api 
+        query='trending'
+        @get-data=${(e) => console.log(e.detail.data.results)}  
+      ></g935-api>
     `
   }
 }
-
-window.customElements.define('my-element', MyElement)
+customElements.define('my-element', MyElement);

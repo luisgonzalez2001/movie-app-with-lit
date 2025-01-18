@@ -24,21 +24,24 @@ export class Movie  extends LitElement {
       }
 
     static get properties() {
-        return {};
+        return {
+            movie: { type: Object}
+        };
     }
 
     constructor() {
         super();
+        this.movie = {};
     }
 
     render() {
         return html`
             <div>
                 <img 
-                    src="https://image.tmdb.org/t/p/w300/adOzdWS35KAo21r9R4BuFCkLer6.jpg"
+                    src="https://image.tmdb.org/t/p/w300${this.movie.poster_path}"
                     alt="Movie title"
                 />
-                <p>Movie Title</p>
+                <p>${this.movie.title}</p>
             </div>
         `;
     }

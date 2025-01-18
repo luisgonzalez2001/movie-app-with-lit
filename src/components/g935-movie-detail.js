@@ -5,6 +5,13 @@ export class MovieDetail  extends LitElement {
         return css`
             * {
                 box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            :host {
+                font-family: var(--font-family-text);
+                font-weight: var(--font-weight-text1);
             }
             
             img {
@@ -82,7 +89,6 @@ export class MovieDetail  extends LitElement {
             g935-button {
                 height: 45px;
                 width: 170px;
-                font-size: 1.8rem;
             }
 
             .score-icon {
