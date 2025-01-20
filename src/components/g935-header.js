@@ -1,6 +1,6 @@
 import { LitElement, html, css } from "lit";
 import { Title } from "./g935-title";
-import { SearchForm } from "./g935-searchForm";
+import { SearchForm } from "./g935-searchform";
 import { HeaderMenu } from "./g935-header-menu";
 
 export class Header extends LitElement {
