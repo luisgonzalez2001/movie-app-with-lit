@@ -84,8 +84,8 @@ export class HeaderMenu  extends LitElement {
             <div class="menu-container ${this.activeMenuContainer ? 'translate' : ''}">
                 <nav>
                     <a href="#home">Home</a>
-                    <a href="#trends">Trending</a>
-                    <a href="#category=">Categories</a>
+                    <a href="#trending">Trending</a>
+                    <a href="#category=28">Categories</a>
                     <a href="#popular">Popular</a>
                     <a href="#upcoming">Upcoming</a>
                 </nav>

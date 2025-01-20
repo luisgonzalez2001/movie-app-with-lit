@@ -83,6 +83,7 @@ export class Header extends LitElement {
                 ></button>
                 <g935-searchform
                     class=${!this.searchFormActive ? 'inactive' : ''} 
+                    @close-searchForm=${this._activeSearchForm}
                 ></g935-searchform>
             </header>
             <g935-header-menu 
@@ -94,12 +95,10 @@ export class Header extends LitElement {
 
     _activeSearchForm() {
         this.searchFormActive = !this.searchFormActive;
-        console.log('Activado/desactivado');
     }
 
     _activeHeaderMenu() {
         this.headerMenuActive = !this.headerMenuActive;
-        console.log('Activado/desactivado');
     }
 }
 customElements.define('g935-header', Header);

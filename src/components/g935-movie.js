@@ -3,9 +3,7 @@ import { LitElement, html, css } from 'lit-element';
 export class Movie  extends LitElement {
     static get styles() {
         return css`
-            div {
-                width: 150px
-            }
+            :host([min]) div { width: 150px; }
 
             img {
                 width: 100%;
@@ -26,18 +24,20 @@ export class Movie  extends LitElement {
 
     static get properties() {
         return {
-            movie: { type: Object }
+            movie: { type: Object },
+            min: { type: Boolean},
         };
     }
 
     constructor() {
         super();
         this.movie = {};
+        this.min = false;
     }
 
     render() {
         return html`
-            <div>
+            <div @click=${() => location.hash = `movie=${this.movie.id}`}>
                 <img 
                     src="https://image.tmdb.org/t/p/w300${this.movie.poster_path}"
                     alt="Movie title"

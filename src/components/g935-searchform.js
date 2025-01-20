@@ -49,9 +49,23 @@ export class SearchForm  extends LitElement {
     return html`
         <form id="searchForm">
             <input type="text" placeholder="Avengers">
-            <button></button>
+            <button @click=${(e) => {
+              e.preventDefault();
+              const searchFormInput = this.shadowRoot.querySelector('input');
+              if (searchFormInput.value.length > 0)
+                location.hash = '#search=' + searchFormInput.value.split(' ').join('');
+              else
+                this._closeSearchForm();
+            }}></button>
         </form>
     `;
+  }
+
+  _closeSearchForm() {
+    const event = new CustomEvent('close-searchForm', {
+      detail: {}
+    })
+    this.dispatchEvent(event);
   }
 }
 

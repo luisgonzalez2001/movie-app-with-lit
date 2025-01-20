@@ -40,13 +40,15 @@ export class MovieSection  extends LitElement {
     static get properties() {
         return {
             type: {type: String},
-            movies: {type: Array}
+            movies: {type: Array},
+            idMovie: { type: String },
         };
     }
 
     constructor() {
         super();
         this.movies = [];
+        this.idMovie = '';
     }
 
     render() {
@@ -54,20 +56,32 @@ export class MovieSection  extends LitElement {
             <section>
                 <g935-api 
                     query=${this.type}
+                    idMovie=${this.idMovie}
                     @get-data=${(e) => this.movies = e.detail.data.results}  
                 ></g935-api>
-                <div class="trendingPreview-header">
+                <div>
                     <h2><slot></slot></h2>
-                    <g935-button>SEE ALL</g935-button>
+                    ${this.type === 'related' ? '' : html`
+                        <g935-button @click=${() => location.hash = this.type}>SEE ALL</g935-button>
+                    `}
                 </div>
                 <article>
-                    ${this.movies.map(movie => {
-                        return html`
-                            <g935-movie .movie=${movie}></g935-movie> 
-                        `
-                    })}
+                    ${this.postMovies()}
                 </article>
             </section>
+        `;
+    }
+
+    postMovies() {
+        if(this.type === 'trending'){
+            this.movies.shift();
+        }
+        return html`
+            ${this.movies.map(movie => {
+                return html`
+                    <g935-movie .movie=${movie} ?min=${true}></g935-movie> 
+                `
+            })}
         `;
     }
 }

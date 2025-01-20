@@ -22,7 +22,7 @@ export class Api extends LitElement {
         });
     }
 
-    firstUpdated() {
+    render() {
         this.getData();
     }
 
@@ -50,6 +50,15 @@ export class Api extends LitElement {
             case 'movie':
                 await this.getMovieById(this.idMovie);
                 break;
+            case 'moviesByGenre':
+                await this.getMoviesByCategory(this.idMovie)
+                break;
+            case 'moviesBySearch':
+                await this.getMoviesBySearch(this.idMovie)
+                break;
+            case 'related':
+                await this.getRelatedMovies(this.idMovie)
+                break;
             default:
                 console.log('Invalid query type');
         }
@@ -75,9 +84,40 @@ export class Api extends LitElement {
         this._sendData(data);
     }
 
-    async getMovieById(id) { 
-        const { data } = await this.api('movie/' + id);
-        this._sendData(data); 
+    async getMovieById(id) {
+        if(id) {
+            const { data } = await this.api('movie/' + id);
+            this._sendData(data); 
+        } else {
+            console.log('Error en el id');
+        }
+    }
+
+    async getMoviesByCategory(id) {
+        const {data} = await this.api('discover/movie', {
+            params: {
+                with_genres: id,
+            },
+        });
+        this._sendData(data);
+    }
+
+    async getMoviesBySearch(query) {
+        const {data} = await this.api('search/movie', {
+            params: {
+                query,
+            },
+        });
+        this._sendData(data)
+    }
+
+    async getRelatedMovies(id) {
+        if(id) {
+            const { data } = await this.api(`movie/${id}/recommendations`);
+            this._sendData(data);
+        } else {
+            console.log('Error en el id');
+        }
     }
 }
 customElements.define('g935-api', Api);

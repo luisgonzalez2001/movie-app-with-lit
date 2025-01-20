@@ -1,4 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
+import { GenresSection } from './g935-genres-section';
+import { MovieSection } from './g935-movie-section';
 
 export class MovieDetail  extends LitElement {
     static get styles() {
@@ -12,12 +14,6 @@ export class MovieDetail  extends LitElement {
             :host {
                 font-family: var(--font-family-text);
                 font-weight: var(--font-weight-text1);
-            }
-            
-            img {
-                width: 100%;
-                min-height: 190px;
-                border-radius: 8px;
             }
             
             .movieDetail__background {
@@ -120,31 +116,28 @@ export class MovieDetail  extends LitElement {
 
     static get properties() {
         return {
-            idMovie: { type: String},
+            idMovie: { type: String },
             movie: {type: Object},
+            detail: { type: Boolean },
         };
     }
 
     constructor() {
         super();
         this.movie = {};
+        this.genres = [];
         this.genre = '';
+        this.detail = false;
     }
 
     render() {
         return html`
-            <g935-api 
-                query='movie' 
-                idMovie=${this.idMovie}
-                @get-data=${(e) => {
-                        this.genre = e.detail.data.genres[0].name;
-                        this.movie = e.detail.data}
-                    }    
-            ></g935-api>
+            ${this.requestMovie()}
             <section>
-                <div class="movieDetail__background">
-                    <img src="https://image.tmdb.org/t/p/w500${this.movie.poster_path}">
-                </div>
+                <div 
+                    class="movieDetail__background" 
+                    style='background-image: url("https://image.tmdb.org/t/p/w500${this.movie.poster_path}")'
+                ></div>
                 <div class="movieDetail-info">
                     <div class="movieDetail-datas">
                         <div class="movieDetail-score">
@@ -158,16 +151,53 @@ export class MovieDetail  extends LitElement {
                     </div>
                     <div class="movieDetail-texts">
                         <h2 class="movieDetail-title">${this.movie.title}</h2>
-                        <p class="movieDetail-description inactive">
+                        <p class="movieDetail-description ${this.detail ? '' : 'inactive'}">
                             ${this.movie.overview}
                         </p>
                     </div>
                     <div class="movieDetail-buttons">
                         <g935-button><span class="play-icon"></span> PLAY TRAILER</g935-button>
-                        <a class="movieDetail-btn-info info-icon"></a>
+                        <a 
+                            class="movieDetail-btn-info info-icon ${this.detail ? 'inactive' : ''}"
+                            @click=${() => location.hash = `movie=${this.movie.id}`}    
+                        ></a>
                     </div>
                 </div>
             </section>
+            ${this.detail ? this.postCategories() : ''}
+        `;
+    }
+
+    requestMovie() {
+        if(this.idMovie) {
+            return html`
+                <g935-api 
+                    query='movie' 
+                    idMovie=${this.idMovie}
+                    @get-data=${(e) => {
+                            this.genres = e.detail.data.genres;
+                            this.genre = this.genres[0].name;
+                            this.movie = e.detail.data}
+                    }    
+                ></g935-api>
+            `;
+        } else {
+            return html`
+                <g935-api 
+                    query=${'trending'}
+                    @get-data=${(e) => {
+                        this.idMovie = e.detail.data.results[0].id;
+                        this.requestUpdate();
+                    }}  
+                ></g935-api>
+            `;
+        }
+    }
+
+    postCategories() {
+        return html`
+            <g935-genres-section .genres=${this.genres}></g935-genres-section>
+            <g935-movie-section type='related' idMovie=${this.movie.id}></g935-movie-section>
         `;
     }
 

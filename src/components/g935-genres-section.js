@@ -59,19 +59,27 @@ export class GenresSection  extends LitElement {
     render() {
         return html`
             <section>
-                <g935-api 
-                    query='genres'
-                    @get-data=${(e) => this.genres = e.detail.data.genres}   
-                ></g935-api>
-                <h2>Categories</h2>
+                ${this.genres.length > 0 ? '' : this.requestGenres()}
+                <h2><slot></slot></h2>
                 <article>
                     ${this.genres.map(genre => {
                         return html`
-                            <button>${genre.name}</button>    
+                            <button
+                                @click = ${() => location.hash = `category=${genre.id}`}
+                            >${genre.name}</button>    
                         `}
                     )}
                 </article>
             </section>
+        `;
+    }
+
+    requestGenres() {
+        return html`
+            <g935-api 
+                query='genres'
+                @get-data=${(e) => this.genres = e.detail.data.genres}   
+            ></g935-api>
         `;
     }
 }
